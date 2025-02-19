@@ -1,0 +1,96 @@
+{
+	"env": {
+		"node": true,
+		"es6": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:import/errors",
+		"plugin:import/warnings",
+		"plugin:import/typescript",
+		"prettier"
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": 2020,
+		"sourceType": "module",
+		"project": "./tsconfig.json"
+	},
+	"plugins": [
+		"@typescript-eslint",
+		"import",
+		"prettier"
+	],
+	"rules": {
+
+		"@typescript-eslint/no-unused-vars": ["error", {
+			"vars": "all",
+			"args": "after-used",
+			"ignoreRestSiblings": true,
+			"argsIgnorePattern": "^_"
+		}],
+		"@typescript-eslint/no-var-requires": "off",
+		"@typescript-eslint/member-ordering": ["error", {
+			"default": {
+				"order": "alphabetically"
+			}
+		}],
+		"brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+		"curly": ["error", "multi-line"],
+		"eqeqeq": ["error", "smart"],
+		"import/no-unresolved": "error",
+		"import/named": "error",
+		"import/namespace": "error",
+		"import/default": "error",
+		"import/export": "error",
+		"import/order": [
+			"error",
+			{
+				"groups": [["builtin", "external"], ["parent", "sibling"], "index", "object", "type"],
+				"pathGroups": [
+					{
+						"pattern": "/**",
+						"group": "parent"
+					}
+				],
+				"pathGroupsExcludedImportTypes": ["builtin"],
+				"newlines-between": "always",
+				"alphabetize": {
+					"order": "asc",
+					"caseInsensitive": true
+				}
+			}
+		],
+		"prefer-const": ["error", {
+			"destructuring": "any",
+			"ignoreReadBeforeAssign": false
+		}],
+		"prettier/prettier": ["error", {
+			"endOfLine": "auto"
+		}],
+		"no-console": "warn",
+		"no-process-exit": "warn",
+		"no-redeclare": "error",
+		"no-trailing-spaces": "error",
+		"no-undef": "error",
+		"no-unexpected-multiline": "error",
+		"no-unused-vars": "off",
+		"no-use-before-define": [
+			"error",
+			{
+				"functions": false,
+				"classes": true
+			}
+		],
+		"no-var": "error"
+	},
+	"settings": {
+		"import/resolver": {
+			"typescript": {
+				"alwaysTryTypes": true,
+				"project": "./tsconfig.json"
+			}
+		}
+	}
+}
