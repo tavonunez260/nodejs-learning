@@ -1,9 +1,9 @@
 import bodyParser from 'body-parser';
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import path from 'path';
 
-import { adminRoutes } from 'routes/admin';
-import { shopRoutes } from 'routes/shop';
+import { get404 } from 'controllers';
+import { adminRoutes, shopRoutes } from 'routes';
 
 const app = express();
 
@@ -16,8 +16,6 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-	res.status(404).render('404', { pageTitle: 'Page Not Found' });
-});
+app.use(get404);
 
 app.listen(3000);

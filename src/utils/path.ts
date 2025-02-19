@@ -1,3 +1,3 @@
 import path from 'path';
 
-export default path.dirname(require.main!.filename);
+export const filePath = path.dirname(require.main!.filename);
