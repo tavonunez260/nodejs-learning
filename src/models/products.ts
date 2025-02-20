@@ -6,7 +6,18 @@ type ProductType = {
 	title: string;
 };
 
-export const products: ProductType[] = [];
+const dataDir = path.join(filePath, 'data');
+const file = path.join(dataDir, 'products.json');
+
+export const getProductsFromFile = (callback: (values: ProductType[]) => void) => {
+	fs.readFile(file, (err, fileContent) => {
+		if (err) {
+			callback([]);
+		} else {
+			callback(JSON.parse(fileContent.toString()));
+		}
+	})
+}
 
 export class Product {
 	title: string;
@@ -14,22 +25,22 @@ export class Product {
 		this.title = title;
 	}
 
-	static fetchAll() {
-		return products;
+	static fetchAll(callback: (values: ProductType[]) => void) {
+		getProductsFromFile(callback);
 	}
 
 	save() {
-		const p = path.join(filePath, 'data', 'products.json');
-		fs.readFile(p, (err, fileContent) => {
-			let products: ProductType[] = [];
-			if (!err) {
-				products = JSON.parse(fileContent.toString());
-			}
+		getProductsFromFile(products => {
 			products.push(this);
-			fs.writeFile(p, JSON.stringify(products), err => {
-				console.log(err);
+
+			// ✅ Write updated products array to file
+			fs.writeFile(file, JSON.stringify(products, null, 2), err => {
+				if (err) {
+					console.error('Error writing file:', err);
+				} else {
+					console.log('Product saved successfully!');
+				}
 			});
 		});
-		products.push(this);
 	}
 }

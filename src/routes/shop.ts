@@ -1,18 +1,9 @@
 import { Router } from 'express';
 
-import { products } from 'controllers';
+import { getProducts } from 'controllers';
 
 const router = Router();
 
-router.get('/', (req, res) => {
-	res.render('shop', {
-		prods: products,
-		pageTitle: 'Shop',
-		path: '/',
-		hasProducts: products.length > 0,
-		activeShop: true,
-		productCSS: true
-	});
-});
+router.get('/', getProducts);
 
 export { router as shopRoutes };
