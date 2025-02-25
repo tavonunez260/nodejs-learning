@@ -1,2 +1,3 @@
 export * from './error';
-export * from './products';
+export * from './admin';
+export * from './shop';
