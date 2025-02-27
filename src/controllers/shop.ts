@@ -29,6 +29,13 @@ export const getCart = (req: Request, res: Response) => {
 	});
 };
 
+export const getOrders = (req: Request, res: Response) => {
+	res.render('shop/cart', {
+		path: '/cart',
+		pageTitle: 'Your Cart '
+	});
+};
+
 export const getCheckout = (req: Request, res: Response) => {
 	res.render('shop/checkout', {
 		path: '/checkout',

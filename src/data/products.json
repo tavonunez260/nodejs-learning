@@ -1,11 +1,8 @@
 [
   {
-    "title": "Title 1"
-  },
-  {
-    "title": "Test 1"
-  },
-  {
-    "title": "Test 2"
+    "description": "Gore-Tex Gloves",
+    "imageUrl": "https://images.bike24.com/i/mb/4f/e4/0f/305175-00-d-626040.jpg",
+    "price": "100.00",
+    "title": "Gloves"
   }
 ]

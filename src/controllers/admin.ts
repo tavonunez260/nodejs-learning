@@ -20,7 +20,12 @@ export const getAdminProducts = (req: Request, res: Response) => {
 };
 
 export const postAddProduct = (req: Request, res: Response) => {
-	const product = new Product(req.body.title);
+	const product = new Product(
+		req.body.title,
+		req.body.imageUrl,
+		req.body.description,
+		req.body.price
+	);
 	product.save();
 	res.redirect('/');
 };
