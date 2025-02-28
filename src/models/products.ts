@@ -18,6 +18,7 @@ export const getProductsFromFile = (callback: (values: Product[]) => void) => {
 
 export class Product {
 	description: string;
+	id: string | undefined;
 	imageUrl: string;
 	price: number;
 	title: string;
@@ -32,7 +33,15 @@ export class Product {
 		getProductsFromFile(callback);
 	}
 
+	static findById(id: string, callback: (product: Product | undefined) => void) {
+		getProductsFromFile(products => {
+			const foundProduct = products.find(product => (product.id = id));
+			callback(foundProduct);
+		});
+	}
+
 	save() {
+		this.id = Math.random().toString();
 		getProductsFromFile(products => {
 			products.push(this);
 
