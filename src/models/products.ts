@@ -3,8 +3,7 @@ import path from 'path';
 
 import { filePath } from 'utils';
 
-const dataDir = path.join(filePath, 'data');
-const file = path.join(dataDir, 'products.json');
+const file = path.join(filePath, 'data', 'products.json');
 
 export const getProductsFromFile = (callback: (values: Product[]) => void) => {
 	fs.readFile(file, (err, fileContent) => {
