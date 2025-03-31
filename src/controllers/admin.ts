@@ -43,3 +43,15 @@ export const getEditProduct = (req: Request, res: Response) => {
 		})
 	);
 };
+
+export const postEditProduct = (req: Request, res: Response) => {
+	const product = new Product(
+		req.body.title,
+		req.body.imageUrl,
+		req.body.description,
+		req.body.price,
+		req.body.id
+	);
+	product.save();
+	res.redirect('/');
+};

@@ -31,11 +31,12 @@ export class Product {
 	price: number;
 	quantity: number;
 	title: string;
-	constructor(title: string, imageUrl: string, description: string, price: number) {
+	constructor(title: string, imageUrl: string, description: string, price: number, id?: string) {
 		this.title = title;
 		this.imageUrl = imageUrl;
 		this.description = description;
 		this.price = price;
+		this.id = id;
 		this.quantity = 1;
 	}
 
@@ -51,18 +52,29 @@ export class Product {
 	}
 
 	save() {
-		this.id = Math.random().toString();
 		getProductsFromFile(products => {
-			products.push(this);
-
-			// ✅ Write updated products array to file
-			fs.writeFile(file, JSON.stringify(products, null, 2), err => {
-				if (err) {
-					console.error('Error writing file:', err);
-				} else {
-					console.log('Product saved successfully!');
-				}
-			});
+			if (this.id) {
+				const existingProductIndex = products.findIndex(product => product.id === this.id);
+				const updatedProducts = [...products];
+				updatedProducts[existingProductIndex] = this;
+				fs.writeFile(file, JSON.stringify(updatedProducts, null, 2), err => {
+					if (err) {
+						console.error('Error writing file:', err);
+					} else {
+						console.log('Product saved successfully!');
+					}
+				});
+			} else {
+				this.id = Math.random().toString();
+				products.push(this);
+				fs.writeFile(file, JSON.stringify(products, null, 2), err => {
+					if (err) {
+						console.error('Error writing file:', err);
+					} else {
+						console.log('Product saved successfully!');
+					}
+				});
+			}
 		});
 	}
 }
