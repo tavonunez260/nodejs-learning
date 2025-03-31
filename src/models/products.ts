@@ -5,7 +5,16 @@ import { filePath } from 'utils';
 
 const file = path.join(filePath, 'data', 'products.json');
 
-export const getProductsFromFile = (callback: (values: Product[]) => void) => {
+export type ProductType = {
+	description: string;
+	id: string | undefined;
+	imageUrl: string;
+	price: number;
+	quantity: number;
+	title: string;
+};
+
+export const getProductsFromFile = (callback: (values: ProductType[]) => void) => {
 	fs.readFile(file, (err, fileContent) => {
 		if (err) {
 			callback([]);
@@ -20,19 +29,21 @@ export class Product {
 	id: string | undefined;
 	imageUrl: string;
 	price: number;
+	quantity: number;
 	title: string;
 	constructor(title: string, imageUrl: string, description: string, price: number) {
 		this.title = title;
 		this.imageUrl = imageUrl;
 		this.description = description;
 		this.price = price;
+		this.quantity = 1;
 	}
 
-	static fetchAll(callback: (values: Product[]) => void) {
+	static fetchAll(callback: (values: ProductType[]) => void) {
 		getProductsFromFile(callback);
 	}
 
-	static findById(id: string, callback: (product: Product | undefined) => void) {
+	static findById(id: string, callback: (product: ProductType | undefined) => void) {
 		getProductsFromFile(products => {
 			const foundProduct = products.find(product => (product.id = id));
 			callback(foundProduct);
