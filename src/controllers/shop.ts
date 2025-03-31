@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 
+import { Cart } from 'models/cart';
 import { Product } from 'models/products';
 
 export const getProducts = (req: Request, res: Response) => {
@@ -42,7 +43,8 @@ export const getCart = (req: Request, res: Response) => {
 
 export const postCart = (req: Request, res: Response) => {
 	const productId = req.params.productId;
-	console.log(productId);
+	Product.findById(productId, product => Cart.addProduct(product));
+	res.redirect('/cart');
 };
 
 export const getOrders = (req: Request, res: Response) => {

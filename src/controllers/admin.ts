@@ -3,9 +3,10 @@ import { Request, Response } from 'express';
 import { Product } from 'models/products';
 
 export const getAddProduct = (req: Request, res: Response) => {
-	res.render('admin/add-product', {
+	res.render('admin/add-edit-product', {
 		path: '/admin/add-product',
-		pageTitle: 'Add Product'
+		pageTitle: 'Add Product',
+		editing: false
 	});
 };
 
@@ -28,4 +29,17 @@ export const postAddProduct = (req: Request, res: Response) => {
 	);
 	product.save();
 	res.redirect('/');
+};
+
+export const getEditProduct = (req: Request, res: Response) => {
+	const editMode = req.params.productId !== undefined;
+	const productId = req.params.productId;
+	Product.findById(productId, product =>
+		res.render('admin/add-edit-product', {
+			path: `/admin/edit-product/${req.params.productId}`,
+			pageTitle: 'Edit Product',
+			editing: editMode,
+			product
+		})
+	);
 };
