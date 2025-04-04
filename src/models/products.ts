@@ -56,17 +56,32 @@ export class Product {
 			if (this.id) {
 				const existingProductIndex = products.findIndex(product => product.id === this.id);
 				const updatedProducts = [...products];
-				updatedProducts[existingProductIndex] = this;
+				updatedProducts[existingProductIndex] = {
+					title: this.title,
+					imageUrl: this.imageUrl,
+					description: this.description,
+					price: this.price,
+					id: this.id,
+					quantity: this.quantity
+				};
+				console.log('this', updatedProducts);
 				fs.writeFile(file, JSON.stringify(updatedProducts, null, 2), err => {
 					if (err) {
 						console.error('Error writing file:', err);
 					} else {
-						console.log('Product saved successfully!');
+						console.log('Product edited successfully!');
 					}
 				});
 			} else {
 				this.id = Math.random().toString();
-				products.push(this);
+				products.push({
+					title: this.title,
+					imageUrl: this.imageUrl,
+					description: this.description,
+					price: this.price,
+					id: this.id,
+					quantity: this.quantity
+				});
 				fs.writeFile(file, JSON.stringify(products, null, 2), err => {
 					if (err) {
 						console.error('Error writing file:', err);
