@@ -5,6 +5,7 @@ import {
 	getAdminProducts,
 	getEditProduct,
 	postAddProduct,
+	postDeleteProduct,
 	postEditProduct
 } from 'controllers';
 
@@ -17,5 +18,7 @@ router.post('/add-product', postAddProduct);
 
 router.get('/edit-product/:productId', getEditProduct);
 router.post('/edit-product', postEditProduct);
+
+router.post('/delete-product', postDeleteProduct);
 
 export { router as adminRoutes };

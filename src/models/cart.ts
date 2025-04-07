@@ -6,6 +6,11 @@ import { filePath } from 'utils';
 
 const file = path.join(filePath, 'data', 'cart.json');
 
+export type CartType = {
+	products: ProductType[];
+	totalPrice: number;
+};
+
 export class Cart {
 	products: ProductType[];
 	totalPrice: number;
@@ -52,5 +57,28 @@ export class Cart {
 				});
 			});
 		}
+	}
+
+	static deleteProduct(id: string, price: number) {
+		fs.readFile(file, (err, fileContent) => {
+			if (err) {
+				console.error('Error reading file:', err);
+				return;
+			}
+
+			const updatedCart = { ...fileContent } as unknown as CartType;
+			const product = updatedCart.products.find(product => product.id === id);
+
+			updatedCart.products = updatedCart.products.filter(product => product.id !== id);
+			updatedCart.totalPrice -= product ? price * product.quantity : 0;
+
+			fs.writeFile(file, JSON.stringify(updatedCart, null, 2), err => {
+				if (err) {
+					console.error('Error writing file:', err);
+				} else {
+					console.log('Product deleted successfully!');
+				}
+			});
+		});
 	}
 }

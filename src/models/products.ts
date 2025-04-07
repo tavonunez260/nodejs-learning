@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import { Cart } from 'models';
 import { filePath } from 'utils';
 
 const file = path.join(filePath, 'data', 'products.json');
@@ -38,6 +39,21 @@ export class Product {
 		this.price = price;
 		this.id = id;
 		this.quantity = 1;
+	}
+
+	static deleteById(id: string) {
+		getProductsFromFile(products => {
+			const product = products.find(product => product.id === id);
+			const updatedProducts = products.filter(product => product.id !== id);
+			fs.writeFile(file, JSON.stringify(updatedProducts, null, 2), err => {
+				if (err) {
+					console.error('Error writing file:', err);
+				} else {
+					Cart.deleteProduct(product?.id ?? '', product?.price ?? 0);
+					console.log('Product deleted successfully!');
+				}
+			});
+		});
 	}
 
 	static fetchAll(callback: (values: ProductType[]) => void) {

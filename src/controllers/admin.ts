@@ -25,10 +25,10 @@ export const postAddProduct = (req: Request, res: Response) => {
 		req.body.title,
 		req.body.imageUrl,
 		req.body.description,
-		req.body.price
+		parseInt(req.body.price)
 	);
 	product.save();
-	res.redirect('/');
+	res.redirect('/admin/products');
 };
 
 export const getEditProduct = (req: Request, res: Response) => {
@@ -53,5 +53,11 @@ export const postEditProduct = (req: Request, res: Response) => {
 		req.body.id
 	);
 	product.save();
-	res.redirect('/');
+	res.redirect('/admin/products');
+};
+
+export const postDeleteProduct = (req: Request, res: Response) => {
+	const { id } = req.body;
+	Product.deleteById(id);
+	res.redirect('/admin/products');
 };
