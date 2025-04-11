@@ -69,6 +69,10 @@ export class Cart {
 			const updatedCart = { ...fileContent } as unknown as CartType;
 			const product = updatedCart.products.find(product => product.id === id);
 
+			if (!product) {
+				return;
+			}
+
 			updatedCart.products = updatedCart.products.filter(product => product.id !== id);
 			updatedCart.totalPrice -= product ? price * product.quantity : 0;
 
@@ -79,6 +83,17 @@ export class Cart {
 					console.log('Product deleted successfully!');
 				}
 			});
+		});
+	}
+
+	static getCart(callback: (cart: CartType | null) => void) {
+		fs.readFile(file, (err, fileContent) => {
+			if (err) {
+				callback(null);
+			} else {
+				const cart = JSON.parse(fileContent.toString());
+				callback(cart);
+			}
 		});
 	}
 }
