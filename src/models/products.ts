@@ -1,15 +1,16 @@
 import fs from 'fs';
+import { RowDataPacket } from 'mysql2';
 import path from 'path';
 
 import { Cart } from 'models';
-import { filePath } from 'utils';
+import { db, filePath } from 'utils';
 
 const file = path.join(filePath, 'data', 'products.json');
 
 export type ProductType = {
 	description: string;
 	id: string | undefined;
-	imageUrl: string;
+	image_url: string;
 	price: number;
 	quantity: number;
 	title: string;
@@ -28,13 +29,13 @@ export const getProductsFromFile = (callback: (values: ProductType[]) => void) =
 export class Product {
 	description: string;
 	id: string | undefined;
-	imageUrl: string;
+	image_url: string;
 	price: number;
 	quantity: number;
 	title: string;
-	constructor(title: string, imageUrl: string, description: string, price: number, id?: string) {
+	constructor(title: string, image_url: string, description: string, price: number, id?: string) {
 		this.title = title;
-		this.imageUrl = imageUrl;
+		this.image_url = image_url;
 		this.description = description;
 		this.price = price;
 		this.id = id;
@@ -56,56 +57,18 @@ export class Product {
 		});
 	}
 
-	static fetchAll(callback: (values: ProductType[]) => void) {
-		getProductsFromFile(callback);
+	static async fetchAll() {
+		return db.execute<ProductType[] & RowDataPacket[]>('SELECT * FROM products').then();
 	}
 
-	static findById(id: string, callback: (product: ProductType | undefined) => void) {
-		getProductsFromFile(products => {
-			const foundProduct = products.find(product => (product.id = id));
-			callback(foundProduct);
-		});
+	static findById(id: string) {
+		return db.execute<ProductType[] & RowDataPacket[]>('SELECT * FROM products WHERE id = ?', [id]);
 	}
 
 	save() {
-		getProductsFromFile(products => {
-			if (this.id) {
-				const existingProductIndex = products.findIndex(product => product.id === this.id);
-				const updatedProducts = [...products];
-				updatedProducts[existingProductIndex] = {
-					title: this.title,
-					imageUrl: this.imageUrl,
-					description: this.description,
-					price: this.price,
-					id: this.id,
-					quantity: this.quantity
-				};
-				console.log('this', updatedProducts);
-				fs.writeFile(file, JSON.stringify(updatedProducts, null, 2), err => {
-					if (err) {
-						console.error('Error writing file:', err);
-					} else {
-						console.log('Product edited successfully!');
-					}
-				});
-			} else {
-				this.id = Math.random().toString();
-				products.push({
-					title: this.title,
-					imageUrl: this.imageUrl,
-					description: this.description,
-					price: this.price,
-					id: this.id,
-					quantity: this.quantity
-				});
-				fs.writeFile(file, JSON.stringify(products, null, 2), err => {
-					if (err) {
-						console.error('Error writing file:', err);
-					} else {
-						console.log('Product saved successfully!');
-					}
-				});
-			}
-		});
+		return db.execute(
+			'INSERT INTO products (title, price, description, image_url) VALUES (?, ?, ?, ?)',
+			[this.title, this.price, this.description, this.image_url]
+		);
 	}
 }

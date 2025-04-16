@@ -1,7 +1,9 @@
 import bodyParser from 'body-parser';
+import { config } from 'dotenv';
 import express from 'express';
 import path from 'path';
 
+config();
 import { get404 } from 'controllers';
 import { adminRoutes, shopRoutes } from 'routes';
 

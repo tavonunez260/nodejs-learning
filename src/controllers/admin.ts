@@ -10,49 +10,47 @@ export const getAddProduct = (req: Request, res: Response) => {
 	});
 };
 
-export const getAdminProducts = (req: Request, res: Response) => {
-	Product.fetchAll(products => {
-		res.render('admin/products', {
-			path: '/admin/products',
-			pageTitle: 'Admin Products',
-			prods: products
-		});
+export const getAdminProducts = async (req: Request, res: Response) => {
+	const [rows] = await Product.fetchAll();
+	res.render('admin/products', {
+		path: '/admin/products',
+		pageTitle: 'Admin Products',
+		prods: rows
 	});
 };
 
-export const postAddProduct = (req: Request, res: Response) => {
+export const postAddProduct = async (req: Request, res: Response) => {
 	const product = new Product(
 		req.body.title,
-		req.body.imageUrl,
+		req.body.image_url,
 		req.body.description,
 		parseInt(req.body.price)
 	);
-	product.save();
+	await product.save();
 	res.redirect('/admin/products');
 };
 
-export const getEditProduct = (req: Request, res: Response) => {
+export const getEditProduct = async (req: Request, res: Response) => {
 	const editMode = req.params.productId !== undefined;
 	const productId = req.params.productId;
-	Product.findById(productId, product =>
-		res.render('admin/add-edit-product', {
-			path: `/admin/edit-product/${req.params.productId}`,
-			pageTitle: 'Edit Product',
-			editing: editMode,
-			product
-		})
-	);
+	const [products] = await Product.findById(productId);
+	res.render('admin/add-edit-product', {
+		path: `/admin/edit-product/${req.params.productId}`,
+		pageTitle: 'Edit Product',
+		editing: editMode,
+		products: products[0]
+	});
 };
 
-export const postEditProduct = (req: Request, res: Response) => {
+export const postEditProduct = async (req: Request, res: Response) => {
 	const product = new Product(
 		req.body.title,
-		req.body.imageUrl,
+		req.body.image_url,
 		req.body.description,
 		req.body.price,
 		req.body.id
 	);
-	product.save();
+	await product.save();
 	res.redirect('/admin/products');
 };
 
