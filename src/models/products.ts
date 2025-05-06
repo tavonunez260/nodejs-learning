@@ -26,3 +26,12 @@ export const Product = sequelize.define('product', {
 		allowNull: false
 	}
 });
+
+export type ProductType = {
+	description: string;
+	id: string | undefined;
+	imageUrl: string;
+	price: number;
+	quantity: number;
+	title: string;
+};
